@@ -9,9 +9,11 @@ const PORT = process.env.PORT || 2000
 
 const app = express()
 
-app.use("api/books", booksRouter)
+app.use(express.json())
+
+app.use("/api/books", booksRouter)
 
 app.listen(PORT, () => {
-  console.log( `Server running on port http://localhost: ${PORT}` )
+  console.log( `Server running on port http://localhost:${PORT}` )
   connectMongoDB()
 })

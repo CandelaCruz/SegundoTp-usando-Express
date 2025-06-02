@@ -33,12 +33,34 @@ const getAllBooks = async (req: Request, res: Response): Promise<any> => {
 
 //CREAR UN LIBRO
 const createBooks = async (req: Request, res: Response): Promise<any> => {
-  try {
-    
-  } catch (error) {
-    
+  const { title, author, publishedYear, genre, available } = req.body;
+
+  // Validación básica
+  if (!title || !author) {
+    return res.status(400).json({ success: false, message: "Title and author are required" });
   }
-}  
+
+  try {
+    const newBook = new Book({
+      title,
+      author,
+      publishedYear,
+      genre,
+      available
+    });
+
+    await newBook.save();
+
+    return res.status(201).json({
+      success: true,
+      data: newBook,
+      message: "Book created successfully"
+    });
+  } catch (error) {
+    const err = error as Error;
+    return res.status(500).json({ success: false, message: err.message });
+  }
+};
 
 const updateBook = async () => {}
 

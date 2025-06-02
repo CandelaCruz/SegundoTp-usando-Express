@@ -6,7 +6,7 @@ const booksSchema = new Schema({
   publishedYear: {type: Number },
   genre: {type: String},
   available:{type: Boolean, default: true}
-})
+}, { versionKey: false })
  
 const Book = model('Book', booksSchema)
 

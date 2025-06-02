@@ -1,4 +1,4 @@
-import { Request, Response } from "express" 
+import { Request, Response } from "express"
 import { Book } from "../models/booksModel"
 
 //OBTENER TODOS LOS LIBROS
@@ -20,7 +20,7 @@ const getAllBooks = async (req: Request, res: Response): Promise<any> => {
 }
 
 //OBTENER UN LIBRO POR ID
- const getBooksById = async (req: Request, res: Response): Promise<any> => {
+const getBooksById = async (req: Request, res: Response): Promise<any> => {
   try {
     const book = await Book.findById(req.params.id);
     if (!book) return res.status(404).json({ success: false, message: "Book not found" });
@@ -62,8 +62,33 @@ const createBooks = async (req: Request, res: Response): Promise<any> => {
   }
 };
 
-const updateBook = async () => {}
+//ACTUALIZAR UN LIBRO
 
-const deleteBook = async () => {}
+const updateBook = async (req: Request, res: Response): Promise<any> => {
+  const { id } = req.params;
+  const updates = req.body;
+
+  try {
+    const updatedBook = await Book.findByIdAndUpdate(id, updates, {
+      new: true,
+      runValidators: true
+    });
+
+    if (!updatedBook) {
+      return res.status(404).json({ success: false, message: "Book not found" });
+    }
+
+    return res.json({
+      success: true,
+      data: updatedBook,
+      message: "Book updated successfully"
+    });
+  } catch (error) {
+    const err = error as Error;
+    return res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+const deleteBook = async () => { }
 
 export { getAllBooks, getBooksById, createBooks, updateBook, deleteBook }

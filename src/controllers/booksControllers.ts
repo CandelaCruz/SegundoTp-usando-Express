@@ -89,6 +89,26 @@ const updateBook = async (req: Request, res: Response): Promise<any> => {
   }
 };
 
-const deleteBook = async () => { }
+//ELIMINAR UN LIBRO
+const deleteBook = async (req: Request, res: Response): Promise<any> => {
+  const { id } = req.params;
+
+  try {
+    const deletedBook = await Book.findByIdAndDelete(id);
+
+    if (!deletedBook) {
+      return res.status(404).json({ success: false, message: "Book not found" });
+    }
+
+    return res.json({
+      success: true,
+      data: deletedBook,
+      message: "Book deleted successfully"
+    });
+  } catch (error) {
+    const err = error as Error;
+    return res.status(500).json({ success: false, message: err.message });
+  }
+};
 
 export { getAllBooks, getBooksById, createBooks, updateBook, deleteBook }
